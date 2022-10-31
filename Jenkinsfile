@@ -5,7 +5,8 @@ pipeline {
         maven 'mvn-3.8.6'
     }
     options {
-        buildDiscarder(logRotator(numToKeepStr: '3'))
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        disableConcurrentBuilds() // 禁止同時執行多次Pipeline
     }
     stages {
         stage('Build') {
