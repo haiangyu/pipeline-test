@@ -6,15 +6,16 @@ pipeline {
     }
     stages {
         stage('Build') {
-            echo "build stage"
-            // steps {
+         
+            steps {
+                   echo "build stage"
             //     sh "mvn clean package spring-boot:repackage"
             //     sh "printenv"
-            // }
-        }
-        post {
-            always {
-                echo "stage post always"
+            }
+            post {
+                always {
+                    echo "stage post always"
+                }
             }
         }
     }
