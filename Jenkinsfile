@@ -4,6 +4,9 @@ pipeline {
     tools {
         maven 'mvn-3.8.6'
     }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+    }
     stages {
         stage('Build') {
          
