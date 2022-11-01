@@ -15,20 +15,25 @@ pipeline {
         CC = 'clang'
     }
     stages {
-        stage("Example")
-        {
-            environment{
-                DEBUG_FLAGS = '-g'
-            }
-            steps{
-                sh "${CC} ${DEBUG_FLAGS}"
-                sh 'printenv'
-                echo "${env.gname}"
-                echo "Running ${env.BUILD_NUMBER} on ${env.JENKINS_URL}"
-                echo "Running $env.BUILD_NUMBER on $env.JENKINS_URL"
-                echo "Running ${BUILD_NUMBER} on ${JENKINS_URL}"
+        stage('pmd') {
+            steps {
+                sh "mvn pmd:pmd"
             }
         }
+        // stage("Example")
+        // {
+        //     environment{
+        //         DEBUG_FLAGS = '-g'
+        //     }
+        //     steps{
+        //         sh "${CC} ${DEBUG_FLAGS}"
+        //         sh 'printenv'
+        //         echo "${env.gname}"
+        //         echo "Running ${env.BUILD_NUMBER} on ${env.JENKINS_URL}"
+        //         echo "Running $env.BUILD_NUMBER on $env.JENKINS_URL"
+        //         echo "Running ${BUILD_NUMBER} on ${JENKINS_URL}"
+        //     }
+        // }
     }
     post {
         changed {
@@ -37,6 +42,7 @@ pipeline {
         always {
             echo "pipeline post always"
             cleanWs()
+            pmd(canRunOnFailed: true, pattern: '**/target/pmd.xml')
         }
         success {
             echo "pipeline post success"
