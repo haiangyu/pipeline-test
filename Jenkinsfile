@@ -7,6 +7,8 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         disableConcurrentBuilds() // 禁止同時執行多次Pipeline
+        retry { 4 } //總重試次數，放在 Stage下為 stage的重試次數
+        timeout(time: 10, unit: 'HOURS') // SECONDS/MINUTES/HOURS
     }
     stages {
         stage('Build') {
@@ -19,6 +21,16 @@ pipeline {
             post {
                 always {
                     echo "stage post always"
+                }
+            }
+        }
+        stage('Example') {
+            steps {
+                script {
+                    def browsers = ['chrome', 'firefox']
+                    for (int i = 0; i < browsers.size(); ++i) {
+                        echo "Test the ${browsers[i]} browser"
+                    }
                 }
             }
         }
