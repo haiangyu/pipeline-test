@@ -26,14 +26,15 @@ pipeline {
         }
         stage('Example') {
             steps {
-                dir("/home/bob/test") {
-                    deleteDir()
-                }
                 script {
                     def browsers = ['chrome', 'firefox']
                     for (int i = 0; i < browsers.size(); ++i) {
                         echo "Test the ${browsers[i]} browser"
                     }
+                    // test write file
+                    writeFile(file: "base64File", text: "amVua2lucyBib29r", encoding: "Base64")
+                    def content = readFile(file: "base64File", encoding: 'UTF-8')
+                    echo '${content}'
                 }
             }
         }
