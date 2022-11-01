@@ -7,37 +7,28 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         disableConcurrentBuilds() // 禁止同時執行多次Pipeline
-        retry ( 4 ) //總重試次數，放在 Stage下為 stage的重試次數
-        timeout(time: 10, unit: 'HOURS') // SECONDS/MINUTES/HOURS
+        retry ( 2 ) //總重試次數，放在 Stage下為 stage的重試次數
+        // timeout(time: 10, unit: 'HOURS') // SECONDS/MINUTES/HOURS
     }
     stages {
-        stage('Build') {
-            
+       stage('stash') {
+            agent { label "master" }
             steps {
-                   echo "build stage"
-            //     sh "mvn clean package spring-boot:repackage"
-            //     sh "printenv"
+                writeFile file : "a.txt", text : "$BUILD_NUMBER"
+                stash(name "abc", include: "a.txt" )
             }
-            post {
-                always {
-                    echo "stage post always"
-                }
-            }
-        }
-        stage('Example') {
+       }
+       stage('unstash') {
+            agent { label "node2" }
             steps {
                 script {
-                    def browsers = ['chrome', 'firefox']
-                    for (int i = 0; i < browsers.size(); ++i) {
-                        echo "Test the ${browsers[i]} browser"
-                    }
-                    // test write file
-                    writeFile(file: "base64File", text: "amVua2lucyBib29r", encoding: "Base64")
-                    def content = readFile(file: "base64File", encoding: 'UTF-8')
+                    unstash(name: "abc")
+                    def content = readFile("a.txt")
                     echo "${content}"
                 }
+                
             }
-        }
+       }
     }
     post {
         changed {
