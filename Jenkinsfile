@@ -11,30 +11,14 @@ pipeline {
         // timeout(time: 10, unit: 'HOURS') // SECONDS/MINUTES/HOURS
     }
     stages {
-        stage("build")
+        stage("Example")
         {
             steps{
-                echo "AA"
+                echo "Running ${env.BUILD_NUMBER} on ${env.JENKINS_URL}"
+                echo "Running $env.BUILD_NUMBER on $env.JENKINS_URL"
+                echo "Running ${BUILD_NUMBER} on ${JENKINS_URL}"
             }
         }
-    //    stage('stash') {
-    //         agent { label "master" }
-    //         steps {
-    //             writeFile file : "a.txt", text : "$BUILD_NUMBER"
-    //             stash(name: "abc", includes: "a.txt" )
-    //         }
-    //    }
-    //    stage('unstash') {
-    //         agent { label "node2" }
-    //         steps {
-    //             script {
-    //                 unstash(name: "abc")
-    //                 def content = readFile("a.txt")
-    //                 echo "${content}"
-    //             }
-                
-    //         }
-    //    }
     }
     post {
         changed {
