@@ -12,7 +12,9 @@ pipeline {
     }
     stages {
         stage('Build') {
-         
+            dir("/home/bob/test") {
+                deleteDir()
+            }
             steps {
                    echo "build stage"
             //     sh "mvn clean package spring-boot:repackage"
