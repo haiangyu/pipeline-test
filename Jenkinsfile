@@ -15,7 +15,7 @@ pipeline {
             agent { label "master" }
             steps {
                 writeFile file : "a.txt", text : "$BUILD_NUMBER"
-                stash(name "abc", include: "a.txt" )
+                stash(name: "abc", include: "a.txt" )
             }
        }
        stage('unstash') {
