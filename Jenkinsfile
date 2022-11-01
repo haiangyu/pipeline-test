@@ -12,9 +12,7 @@ pipeline {
     }
     stages {
         stage('Build') {
-            dir("/home/bob/test") {
-                deleteDir()
-            }
+            
             steps {
                    echo "build stage"
             //     sh "mvn clean package spring-boot:repackage"
@@ -28,6 +26,9 @@ pipeline {
         }
         stage('Example') {
             steps {
+                dir("/home/bob/test") {
+                    deleteDir()
+                }
                 script {
                     def browsers = ['chrome', 'firefox']
                     for (int i = 0; i < browsers.size(); ++i) {
