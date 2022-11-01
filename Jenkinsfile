@@ -11,24 +11,30 @@ pipeline {
         // timeout(time: 10, unit: 'HOURS') // SECONDS/MINUTES/HOURS
     }
     stages {
-       stage('stash') {
-            agent { label "master" }
-            steps {
-                writeFile file : "a.txt", text : "$BUILD_NUMBER"
-                stash(name: "abc", includes: "a.txt" )
+        stage("build")
+        {
+            steps{
+                echo "AA"
             }
-       }
-       stage('unstash') {
-            agent { label "node2" }
-            steps {
-                script {
-                    unstash(name: "abc")
-                    def content = readFile("a.txt")
-                    echo "${content}"
-                }
+        }
+    //    stage('stash') {
+    //         agent { label "master" }
+    //         steps {
+    //             writeFile file : "a.txt", text : "$BUILD_NUMBER"
+    //             stash(name: "abc", includes: "a.txt" )
+    //         }
+    //    }
+    //    stage('unstash') {
+    //         agent { label "node2" }
+    //         steps {
+    //             script {
+    //                 unstash(name: "abc")
+    //                 def content = readFile("a.txt")
+    //                 echo "${content}"
+    //             }
                 
-            }
-       }
+    //         }
+    //    }
     }
     post {
         changed {
@@ -36,6 +42,7 @@ pipeline {
         }
         always {
             echo "pipeline post always"
+            cleanWs()
         }
         success {
             echo "pipeline post success"
