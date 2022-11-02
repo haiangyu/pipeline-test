@@ -21,7 +21,6 @@ pipeline {
                 DEBUG_FLAGS = '-g'
             }
             steps{
-                sh "${CC} ${DEBUG_FLAGS}"
                 sh 'printenv'
                 echo "${env.gname}"
                 echo "Running ${env.BUILD_NUMBER} on ${env.JENKINS_URL}"
