@@ -8,7 +8,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         disableConcurrentBuilds() // 禁止同時執行多次Pipeline
         retry ( 2 ) //總重試次數，放在 Stage下為 stage的重試次數
-        // timeout(time: 10, unit: 'HOURS') // SECONDS/MINUTES/HOURS
+        timeout(time: 10, unit: 'HOURS') // SECONDS/MINUTES/HOURS
     }
     // 自定環境變數
     environment {
