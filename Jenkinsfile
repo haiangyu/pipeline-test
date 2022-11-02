@@ -37,7 +37,6 @@ pipeline {
         always {
             echo "pipeline post always"
             cleanWs()
-            pmd(canRunOnFailed: true, pattern: '**/target/pmd.xml')
         }
         success {
             echo "pipeline post success"
