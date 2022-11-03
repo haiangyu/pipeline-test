@@ -10,35 +10,31 @@ pipeline {
         retry ( 2 ) //總重試次數，放在 Stage下為 stage的重試次數
         timeout(time: 10, unit: 'HOURS') // SECONDS/MINUTES/HOURS
     }
+    parameters {
+        choice(name: 'CHOICES', choices: 'dev\ntest\nstaging', description: '請選擇部署的環境！')
+    }
     // 自定環境變數
     environment {
         CC = 'clang'
     }
     stages {
-        stage("Example")
+        stage("deploy to test")
         {
-            environment{
-                DEBUG_FLAGS = '-g'
+            when {
+                expression { return params.CHOICES == 'test' }
             }
-            steps{
-                sh 'printenv'
-                echo "${env.gname}"
-                echo "Running  ${env.BUILD_NUMBER} on ${env.JENKINS_URL}"
-                echo "Running  $env.BUILD_NUMBER on $env.JENKINS_URL"
-                echo "Running  ${BUILD_NUMBER} on ${JENKINS_URL}"
+            steps {
+                echo "deploy to test"
             }
         }
-    }
-    post {
-        changed {
-            echo "pipeline post changed"
-        }
-        always {
-            echo "pipeline post always"
-            cleanWs()
-        }
-        success {
-            echo "pipeline post success"
+        stage("deploy staging")
+        {
+            when {
+                expression { return params.CHOICES == 'staging' }
+            }
+            steps {
+                echo "deploy to staging"
+            }
         }
     }
 }
