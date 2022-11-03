@@ -36,5 +36,10 @@ pipeline {
                 echo "deploy to staging"
             }
         }
+        stage("test") {
+            steps {
+                input message : "發佈或停止"
+            }
+        }
     }
 }
