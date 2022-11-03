@@ -27,7 +27,7 @@ pipeline {
                     message : "發佈或停止",
                     ok : '確定',
                     parameters : [
-                        choice(name: 'ENV', choices: 'dev\ntest\nstaging', description: '請選擇部署的環境！')
+                        choice(name: 'ENV', choices: 'dev\ntest\nstaging', description: '請選擇部署的環境！'),
                         string(defaltValue: '', description: '', name: 'myparam')
                     ],
                     submitter : 'admin, admin2, releaseGroup',
