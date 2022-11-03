@@ -1,3 +1,6 @@
+def approvalMap
+
+
 pipeline {
     agent any
     
@@ -18,28 +21,45 @@ pipeline {
         CC = 'clang'
     }
     stages {
-        stage("deploy to test")
-        {
-            when {
-                expression { return params.CHOICES == 'test' }
-            }
-            steps {
-                echo "deploy to test"
-            }
-        }
-        stage("deploy staging")
-        {
-            when {
-                expression { return params.CHOICES == 'staging' }
-            }
-            steps {
-                echo "deploy to staging"
-            }
-        }
         stage("test") {
             steps {
-                input message : "發佈或停止"
+                approvalMap = input (
+                    message : "發佈或停止",
+                    ok : '確定',
+                    parameters : [
+                        choice(name: 'ENV', choices: 'dev\ntest\nstaging', description: '請選擇部署的環境！')
+                        string(defaltValue: '', description: '', name: 'myparam')
+                    ],
+                    submitter : 'admin, admin2, releaseGroup',
+                    submitterParamer: 'APPROVER'
+                )
             }
         }
+        stage("deploy"){
+            steps {
+                echo "操作者是： ${approvalMap['APPROVER']}"
+                echo "發佈到什麼環境： ${approvalMap['ENV']}"
+                echo "操作者是 ${approvalMap['myparam']}"
+            }
+        }
+        // stage("deploy to test")
+        // {
+        //     when {
+        //         expression { return params.CHOICES == 'test' }
+        //     }
+        //     steps {
+        //         echo "deploy to test"
+        //     }
+        // }
+        // stage("deploy staging")
+        // {
+        //     when {
+        //         expression { return params.CHOICES == 'staging' }
+        //     }
+        //     steps {
+        //         echo "deploy to staging"
+        //     }
+        // }
+        
     }
 }
